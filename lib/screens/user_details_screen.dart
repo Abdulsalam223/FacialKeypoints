@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:login_signup/SecureStorage/secureStorage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:login_signup/screens/signin_screen.dart';
 import 'package:login_signup/screens/welcome_screen.dart';
+import '../widgets/custom_scaffold.dart';
 
 class UserDetailsScreen extends StatefulWidget {
   const UserDetailsScreen({super.key});
@@ -30,22 +30,15 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   }
 
   Future<void> _fetchUserDetails(String email) async {
-    // Replace '@' and '.' with '_' to match Firestore document ID format
     String docId = email.replaceAll('@', '_').replaceAll('.', '_');
-
-    print('Fetching user details for email: $email');
-
     DocumentSnapshot userDoc =
         await FirebaseFirestore.instance.collection('users').doc(docId).get();
-
-    print('User document in user details: ${userDoc.data()}');
 
     if (userDoc.exists) {
       setState(() {
         userDetails = userDoc.data() as Map<String, dynamic>;
       });
     } else {
-      // Handle user not found
       setState(() {
         userDetails = null;
       });
@@ -56,11 +49,10 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     await FirebaseAuth.instance.signOut();
     await SecureStorage().deleteSecureData('userEmail');
 
-    // Redirect to WelcomeScreen without allowing back navigation
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-      (Route<dynamic> route) => false, // Removes all previous routes
+      (Route<dynamic> route) => false,
     );
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -70,59 +62,100 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('User Details'),
-        backgroundColor: Colors.blueAccent,
-      ),
-      body: userDetails == null
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildUserDetailRow(
-                          label: 'First Name',
-                          value: userDetails!['firstName']),
-                      _buildUserDetailRow(
-                          label: 'Last Name', value: userDetails!['lastName']),
-                      _buildUserDetailRow(
-                          label: 'Email', value: userDetails!['email']),
-                      _buildUserDetailRow(
-                          label: 'Date of Birth', value: userDetails!['dob']),
-                      const SizedBox(height: 20), // Spacing before the button
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            iconColor: Colors.red, // Button color
-                          ),
-                          onPressed: _logout,
-                          child: const Text('Logout'),
-                        ),
-                      ),
-                    ],
-                  ),
+    return CustomScaffold(
+      child: Column(
+        children: [
+          const Expanded(
+            flex: 1,
+            child: SizedBox(height: 10),
+          ),
+          Expanded(
+            flex: 7,
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(25.0, 50.0, 25.0, 20.0),
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40.0),
+                  topRight: Radius.circular(40.0),
                 ),
               ),
+              child: userDetails == null
+                  // ignore: prefer_const_constructors
+                  ? Center(
+                      // ignore: prefer_const_constructors
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          CircularProgressIndicator(),
+                          SizedBox(width: 10),
+                          Text('Loading user details...'),
+                        ],
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'User Details',
+                            style: TextStyle(
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                          const SizedBox(height: 40.0),
+                          _buildUserDetailRow(
+                            label: 'First Name',
+                            value: userDetails!['firstName'],
+                            icon: Icons.person,
+                          ),
+                          _buildUserDetailRow(
+                            label: 'Last Name',
+                            value: userDetails!['lastName'],
+                            icon: Icons.person_outline,
+                          ),
+                          _buildUserDetailRow(
+                            label: 'Email',
+                            value: userDetails!['email'],
+                            icon: Icons.email,
+                          ),
+                          _buildUserDetailRow(
+                            label: 'Date of Birth',
+                            value: userDetails!['dob'],
+                            icon: Icons.calendar_today,
+                          ),
+                          const SizedBox(
+                              height: 20), // Spacing before the button
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: _logout,
+                              child: const Text('Logout'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
             ),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildUserDetailRow({required String label, required String? value}) {
+  Widget _buildUserDetailRow({
+    required String label,
+    required String? value,
+    required IconData icon,
+  }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Icon(icon, color: Colors.blueAccent, size: 24),
+          const SizedBox(width: 10),
           Text(
             label,
             style: const TextStyle(
@@ -130,6 +163,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          const Spacer(),
           Text(
             value ?? 'N/A',
             style: const TextStyle(

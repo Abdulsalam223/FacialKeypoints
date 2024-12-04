@@ -43,29 +43,67 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return CustomScaffold(
       child: Column(
         children: [
+          // Add image above the text
           Flexible(
-            flex: 8,
+            flex: 0, // Adjust flex value to allocate space for the image
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: Stack(
+                children: [
+                  Image.asset(
+                    'assets/images/face.png', // Replace with your image path
+                    height: 300, // Adjust height
+                    width: 300, // Adjust width
+                    fit: BoxFit.cover, // Adjust fit
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 0,
             child: Container(
               padding: const EdgeInsets.symmetric(
-                vertical: 0,
+                vertical: 20, // Adjust vertical padding for spacing
                 horizontal: 40.0,
               ),
               child: Center(
                 child: RichText(
                   textAlign: TextAlign.center,
-                  text: const TextSpan(
+                  text: TextSpan(
                     children: [
                       TextSpan(
-                          text: 'Welcome Back!\n',
-                          style: TextStyle(
-                            fontSize: 45.0,
-                            fontWeight: FontWeight.w600,
-                          )),
+                        text: 'Welcome Back!\n',
+                        style: TextStyle(
+                          fontSize: 45.0, // Large font size for heading
+                          fontWeight: FontWeight.w600,
+                          color: const Color.fromARGB(255, 5, 0, 0)
+                              .withOpacity(0.9),
+                          shadows: [
+                            Shadow(
+                              color: Colors.black.withOpacity(0.25),
+                              blurRadius: 5,
+                              offset: Offset(1, 1),
+                            ),
+                          ],
+                        ),
+                      ),
                       TextSpan(
-                          text: '\nEnter your personal details',
-                          style: TextStyle(
-                            fontSize: 20,
-                          ))
+                        text: '\nPlease provide your credentials to proceed.',
+                        style: TextStyle(
+                          fontSize: 16, // Smaller font size for body text
+                          fontWeight: FontWeight.w600,
+                          color: const Color.fromARGB(255, 5, 0, 0)
+                              .withOpacity(0.9),
+                          shadows: [
+                            Shadow(
+                              color: Colors.black.withOpacity(0.25),
+                              blurRadius: 5,
+                              offset: Offset(1, 1),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -73,16 +111,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
           ),
           // Display the connection status
+          const SizedBox(height: 250), // Add spacing between elements
           Flexible(
             flex: 1,
             child: Center(
               child: Text(
                 _connectionStatus,
-                style: const TextStyle(fontSize: 18, color: Colors.red),
+                style: const TextStyle(
+                    fontSize: 18, color: Color.fromARGB(255, 124, 231, 140)),
                 textAlign: TextAlign.center,
               ),
             ),
           ),
+          const SizedBox(height: 10),
           Flexible(
             flex: 1,
             child: Align(

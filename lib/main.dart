@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:login_signup/screens/HomeScreen.dart';
+import 'package:login_signup/screens/SplashScreen.dart';
 import 'package:login_signup/screens/image_upload_screen.dart';
 import 'package:login_signup/screens/welcome_screen.dart';
 import 'package:login_signup/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import './SecureStorage/secureStorage.dart'; // Import the SecureStorage class
-import 'package:login_signup/screens/SplashScreen.dart';
+import 'package:login_signup/screens/Firstsplash.dart'; // Import your Firstsplash screen
+import 'package:login_signup/screens/SplashScreen.dart'; // Import your Secondspl
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,82 +37,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: lightMode,
-      home: const AuthCheck(),
+      home: const AuthCheck(), // Show AuthCheck screen here
     );
   }
 }
-
-// class AuthCheck extends StatefulWidget {
-//   const AuthCheck({super.key});
-
-//   @override
-//   _AuthCheckState createState() => _AuthCheckState();
-// }
-
-// class _AuthCheckState extends State<AuthCheck> {
-//   bool _isLoading = true; // To control the loading state
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _checkUserStatus();
-//   }
-
-//   Future<void> _checkUserStatus() async {
-//     print('checking user');
-//     final SecureStorage _secureStorage = SecureStorage();
-
-//     // Read email from shared preferences
-//     String? userEmail = await _secureStorage.readSecureData('userEmail');
-//     print('user mail $userEmail');
-//     if (userEmail != null) {
-//       // Check if the user exists in the Firestore database
-//       DocumentSnapshot userDoc = await FirebaseFirestore.instance
-//           .collection('users')
-//           .doc(userEmail)
-//           .get();
-//       print('user exists ${userDoc.exists}');
-//       if (!userDoc.exists) {
-//         // User exists, navigate to ImageUploadScreen
-//         Navigator.pushReplacement(
-//           context,
-//           MaterialPageRoute(builder: (context) => const ImageUploadScreen()),
-//         );
-//       } else {
-//         // User does not exist, navigate to WelcomeScreen
-//         Navigator.pushReplacement(
-//           context,
-//           MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-//         );
-//       }
-//     } else {
-//       // No email found, navigate to WelcomeScreen
-//       Navigator.pushReplacement(
-//         context,
-//         MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-//       );
-//     }
-
-//     // Set loading to false after the checks
-//     setState(() {
-//       _isLoading = false;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: _isLoading
-//           ? Center(
-//               child: CircularProgressIndicator(
-//                 valueColor:
-//                     AlwaysStoppedAnimation<Color>(lightColorScheme.primary),
-//               ),
-//             )
-//           : Container(), // You can also add a fallback UI if needed
-//     );
-//   }
-// }
 
 class AuthCheck extends StatefulWidget {
   const AuthCheck({super.key});
@@ -119,17 +50,18 @@ class AuthCheck extends StatefulWidget {
 }
 
 class _AuthCheckState extends State<AuthCheck> {
-  bool _isLoading = true;
+  bool _isLoading = true; // To control the loading state
 
   @override
   void initState() {
     super.initState();
-    _showSplashScreen(); // Show splash screen first
+    _checkUserStatus();
+    //_showSplashScreen(); // Show splash screen first
   }
 
   Future<void> _showSplashScreen() async {
-    // Show splash screen for 10 seconds
-    await Future.delayed(const Duration(seconds: 10));
+    // Show splash screen for 5 seconds
+    await Future.delayed(const Duration(seconds: 5));
     _checkUserStatus();
   }
 
@@ -143,20 +75,26 @@ class _AuthCheckState extends State<AuthCheck> {
           .doc(userEmail)
           .get();
       if (!userDoc.exists) {
+        // User exists
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const ImageUploadScreen()),
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
         );
       } else {
+        // User does not exist
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const WelcomeScreen()),
         );
       }
     } else {
+      // No email found, navigate
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+        MaterialPageRoute(
+            builder: (context) => const Firstsplash(
+                  slogan: '',
+                )),
       );
     }
     setState(() {
@@ -167,7 +105,9 @@ class _AuthCheckState extends State<AuthCheck> {
   @override
   Widget build(BuildContext context) {
     return _isLoading
-        ? const SplashScreen(slogan: 'Your Face, Your Key') // Pass your slogan
-        : Container();
+        ? const Firstsplash(
+            slogan:
+                'Your Face, Your Key') // Use Firstsplash instead of SplashScreen
+        : Container(); // Return empty container when loading is complete
   }
 }

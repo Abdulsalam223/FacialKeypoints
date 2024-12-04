@@ -24,12 +24,12 @@ const darkColorScheme = ColorScheme(
   onSecondary: Color(0xFFFFFFFF),
   error: Color(0xFFBA1A1A),
   onError: Color(0xFFFFFFFF),
-  background: Color(0xFFFCFDF6),
-  onBackground: Color(0xFF1A1C18),
+  background: Color(0xFF121212), // Dark background
+  onBackground: Color(0xFFE0E0E0), // Light text on dark background
   shadow: Color(0xFF000000),
-  outlineVariant: Color(0xFFC2C8BC),
-  surface: Color(0xFFF9FAF3),
-  onSurface: Color(0xFF1A1C18),
+  outlineVariant: Color(0xFF424242), // Subtle darker outlines
+  surface: Color(0xFF1E1E1E), // Darker surface
+  onSurface: Color(0xFFE0E0E0), // Light text on dark surface
 );
 
 ThemeData lightMode = ThemeData(
@@ -39,16 +39,18 @@ ThemeData lightMode = ThemeData(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       backgroundColor: MaterialStateProperty.all<Color>(
-        lightColorScheme.primary, // Slightly darker shade for the button
+        lightColorScheme.primary, // Button color
       ),
-      foregroundColor:
-          MaterialStateProperty.all<Color>(Colors.white), // text color
-      elevation: MaterialStateProperty.all<double>(5.0), // shadow
+      foregroundColor: MaterialStateProperty.all<Color>(
+        lightColorScheme.onPrimary, // Text color
+      ),
+      elevation: MaterialStateProperty.all<double>(5.0), // Shadow
       padding: MaterialStateProperty.all<EdgeInsets>(
-          const EdgeInsets.symmetric(horizontal: 20, vertical: 18)),
+        const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+      ),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16), // Adjust as needed
+          borderRadius: BorderRadius.circular(16), // Rounded corners
         ),
       ),
     ),
@@ -59,4 +61,23 @@ ThemeData darkMode = ThemeData(
   useMaterial3: true,
   brightness: Brightness.dark,
   colorScheme: darkColorScheme,
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all<Color>(
+        darkColorScheme.primary, // Button color
+      ),
+      foregroundColor: MaterialStateProperty.all<Color>(
+        darkColorScheme.onPrimary, // Text color
+      ),
+      elevation: MaterialStateProperty.all<double>(5.0), // Shadow
+      padding: MaterialStateProperty.all<EdgeInsets>(
+        const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+      ),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16), // Rounded corners
+        ),
+      ),
+    ),
+  ),
 );

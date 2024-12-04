@@ -39,9 +39,11 @@ dependencies:
   firebase_core: ^3.6.0  # Update to the latest version
   firebase_auth: ^5.3.1  # Update to the latest version
   cloud_firestore: ^5.4.4
-  shared_preferences: ^2.3.2
+  shared_preferences: ^2.0.15
   image_picker: ^1.1.2
   camera: ^0.11.0+2
+  #google_signin: ^6.2.1
+  intl: ^0.18.0 
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +55,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  #icone_plus: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -71,8 +74,17 @@ flutter:
     - assets/images/logo.png
     - assets/images/logo1.png
     - assets/images/bg1.png
-  #   - images/a_dot_ham.jpeg
-
+    - assets/images/pbox.png
+    - assets/images/face2.jpeg
+    - assets/images/face.png
+    - assets/images/background2.jpg
+    - assets/images/a1.png
+    - assets/images/a2.png
+    - assets/images/bg2.png
+    - assets/images/bg3.png
+    
+   
+  
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
