@@ -8,6 +8,7 @@ import 'user_details_screen.dart'; // Import your UserDetailsScreen here
 import 'package:intl/intl.dart';
 import 'SettingScreen.dart';
 import 'NotificationScreen.dart'; // Import NotificationScreen here
+import 'Register_Screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -119,7 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  
                   IconButton(
                     icon: Icon(
                       Icons.settings,
@@ -203,6 +203,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Icon(Icons.more_horiz),
                           ],
+                        ),
+                        const SizedBox(height: 20),
+                        ExerciseItem(
+                          icon: Icons.person_add,
+                          color: Colors.green,
+                          title: 'Register',
+                          subtitle: 'add new person',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterScreen()),
+                            );
+                          },
                         ),
                         const SizedBox(height: 20),
                         ExerciseItem(

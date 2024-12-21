@@ -44,6 +44,9 @@ dependencies:
   camera: ^0.11.0+2
   #google_signin: ^6.2.1
   intl: ^0.18.0 
+  firebase_storage: ^12.3.4
+  html: ^0.15.5 # For handling file inputs in Web
+
 
 dev_dependencies:
   flutter_test:
